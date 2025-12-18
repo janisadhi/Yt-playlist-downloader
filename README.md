@@ -73,7 +73,8 @@ This may take a few minutes depending on playlist size.
 ```
 
 3. Wait for the download to finish. After all downloads, a summary of tracks with audio bitrate will be displayed.
-![Uploading image.png…]()
+   <img width="1078" height="507" alt="image" src="https://github.com/user-attachments/assets/c58c7e81-02c7-4eaa-bed5-78ae07d043f0" />
+
 
 ---
 
