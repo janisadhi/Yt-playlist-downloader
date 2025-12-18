@@ -1,0 +1,96 @@
+import yt_dlp
+import os
+import sys
+
+# -----------------------------
+# Configuration
+# -----------------------------
+PLAYLIST_FILE = "playlists.txt"  # File containing playlist URLs
+DOWNLOAD_FOLDER = "downloads"    # Folder to save downloaded playlists
+
+# -----------------------------
+# Check playlist file
+# -----------------------------
+if not os.path.exists(PLAYLIST_FILE):
+    print(f"Error: {PLAYLIST_FILE} not found!")
+    exit(1)
+
+with open(PLAYLIST_FILE, "r") as f:
+    playlist_urls = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
+
+if not playlist_urls:
+    print("No playlist URLs found in the file!")
+    exit(1)
+
+# -----------------------------
+# Progress hook for organized output
+# -----------------------------
+def my_hook(d):
+    if d['status'] == 'finished':
+        info_dict = d['info_dict']
+        formats = info_dict.get('formats', [])
+        best_audio = max(
+            (f for f in formats if f.get('acodec') != 'none'),
+            key=lambda x: x.get('abr') or 0,
+            default=None
+        )
+        abr = best_audio.get('abr', 'unknown') if best_audio else 'unknown'
+
+        track_num = info_dict.get('playlist_index', '?')
+        title = info_dict.get('title', 'Unknown Title')
+        print(f"[Track {track_num:>2}] {title:<60} | Audio bitrate: {abr:.0f} kbps")
+
+# -----------------------------
+# yt-dlp options
+# -----------------------------
+ydl_opts = {
+    'format': 'bestaudio/best',
+    'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(playlist_title)s', '%(title)s.%(ext)s'),
+    'ignoreerrors': True,
+    'noplaylist': False,
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'opus',
+        'preferredquality': '0',
+    }],
+    'progress_hooks': [my_hook],
+    'quiet': True,         # Suppresses most output
+    'no_warnings': True,   # Suppresses warnings
+    'logger': None          # Completely disable yt-dlp internal logging
+}
+
+
+# -----------------------------
+# Dummy stdout to hide yt-dlp internal prints
+# -----------------------------
+class DummyFile(object):
+    def write(self, x): pass
+    def flush(self): pass
+
+nullfile = DummyFile()
+
+# -----------------------------
+# Download playlists
+# -----------------------------
+with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    for url in playlist_urls:
+        try:
+            # Extract playlist info
+            info = ydl.extract_info(url, download=False)
+            playlist_title = info.get('title', 'Unknown Playlist')
+            num_tracks = info.get('playlist_count', '?')
+
+            print("\n" + "="*80)
+            print(f"Downloading playlist: {playlist_title} | Total tracks: {num_tracks}")
+            print("="*80)
+
+            # Hide yt-dlp internal output during actual download
+            original_stdout = sys.stdout
+            sys.stdout = nullfile
+            ydl.download([url])
+            sys.stdout = original_stdout
+
+        except Exception as e:
+            print(f"Error downloading playlist {url}: {e}")
+
+print("\nAll playlists processed!")
