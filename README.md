@@ -1,35 +1,51 @@
 # YouTube Playlist Downloader (OPUS)
 
 ## Introduction
-This Python script allows you to download entire YouTube playlists and convert the audio to **OPUS format** at the highest possible quality.  
-It reads playlist URLs from a `playlists.txt` file (one URL per line) and saves all downloaded tracks in organized folders.  
+This project is a Python-based YouTube playlist downloader that extracts **high-quality audio** and converts it into **OPUS format**.  
+It supports downloading **multiple playlists**, organizes tracks neatly into folders, and prints a clean **download summary** including audio bitrates.
 
-Key features:
-- Downloads all tracks from multiple playlists.
-- Converts audio to OPUS format using FFmpeg.
-- Shows a summary of all downloaded tracks, including track number, title, and audio bitrate.
-- Works fully in a Python virtual environment.
+The script runs fully inside a **Python virtual environment**, keeping your system clean.
+
+---
+
+## Features
+- Download full YouTube playlists
+- Best available audio quality
+- Automatic OPUS conversion
+- Clean download summary (track number, title, bitrate)
+- Works inside a Python virtual environment (venv)
 
 ---
 
 ## Prerequisites
-- Python 3.8 or higher installed.
-- `pip` package manager.
-- Git (optional, if cloning the repository).
+- Python **3.8+**
+- `pip`
+- Git
 
 ---
 
-## Setup
+## Getting Started
 
-### 1. Create a virtual environment
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/Yt-playlist-downloader.git
+cd Yt-playlist-downloader
+````
 
-#### On Windows:
+---
+
+## Environment Setup
+
+### 2. Create a virtual environment
+
+#### Windows
+
 ```cmd
 python -m venv myvenv
 myvenv\Scripts\activate
 ```
 
-#### On Linux / macOS:
+#### Linux / macOS
 
 ```bash
 python3 -m venv myvenv
@@ -38,9 +54,9 @@ source myvenv/bin/activate
 
 ---
 
-### 2. Install dependencies
+### 3. Install dependencies
 
-After activating the virtual environment, install all required packages using the `requirements.txt` file:
+With the virtual environment activated:
 
 ```bash
 pip install -r requirements.txt
@@ -50,20 +66,24 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. **Add playlist URLs** to `playlists.txt`, one URL per line:
+### 4. Add playlist URLs
+
+Open `playlists.txt` and add **one playlist URL per line**:
 
 ```
 https://www.youtube.com/playlist?list=PLxxxx...
 https://www.youtube.com/playlist?list=PLyyyy...
 ```
 
-2. **Run the downloader:**
+---
+
+### 5. Run the downloader
 
 ```bash
 python download_youtube_playlists.py
 ```
 
-You will see a message:
+After starting, you will see:
 
 ```
 ===============================================
@@ -72,15 +92,15 @@ This may take a few minutes depending on playlist size.
 ===============================================
 ```
 
-3. Wait for the download to finish. After all downloads, a summary of tracks with audio bitrate will be displayed.
-   <img width="1078" height="507" alt="image" src="https://github.com/user-attachments/assets/c58c7e81-02c7-4eaa-bed5-78ae07d043f0" />
+Once all downloads are complete, a **download summary** is printed.
 
+<img width="1078" height="507" alt="Download Summary Example" src="https://github.com/user-attachments/assets/c58c7e81-02c7-4eaa-bed5-78ae07d043f0" />
 
 ---
 
-## Directory and File Structure
+## Output Directory Structure
 
-After running the script, the downloaded playlists will be saved in the following structure:
+After execution, files are organized as follows:
 
 ```
 Yt-playlist-downloader/
@@ -88,7 +108,7 @@ Yt-playlist-downloader/
 ├── playlists.txt
 ├── download_youtube_playlists.py
 ├── requirements.txt
-├── myvenv/                # Virtual environment
+├── myvenv/                  # Virtual environment
 └── downloads/
     ├── Playlist Name 1/
     │   ├── Track 1.opus
@@ -100,18 +120,18 @@ Yt-playlist-downloader/
         └── ...
 ```
 
-* Each playlist has its **own folder** inside the `downloads/` directory.
-* Track filenames match their **YouTube titles**.
-* Audio files are in **OPUS format**.
+### Notes on Output
+
+* Each playlist gets its **own folder**
+* Track names match their **YouTube titles**
+* All audio files are saved in **OPUS format**
 
 ---
 
-## Notes
+## Notes & Tips
 
-* Ensure a stable internet connection for large playlists.
-* The script runs entirely in the virtual environment; no system-wide FFmpeg installation is required.
-* Bitrates may vary depending on the source audio quality on YouTube.
-
----
-
+* Large playlists may take time — please be patient.
+* Audio bitrate depends on the original YouTube source.
+* No system-wide FFmpeg installation is required.
+* Keep the virtual environment activated while running the script.
 
